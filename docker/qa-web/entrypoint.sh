@@ -1,5 +1,3 @@
 #!/bin/bash
-set -e
-
-sed -i "s|localhost|$MONGODB|" /QUANTAXIS/QUANTAXIS/QAUtil/QASetting.py
-exec "$@"
+sed -i "s|localhost|$MONGODB|" /opt/conda/lib/python3.8/site-packages/QUANTAXIS/QAUtil/QASetting.py
+quantaxis_webserver

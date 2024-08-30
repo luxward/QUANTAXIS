@@ -37,8 +37,8 @@ except:
 """
 """
 
-if sys.version_info.major != 3 or sys.version_info.minor not in [4, 5, 6, 7, 8]:
-    print('wrong version, should be 3.4/3.5/3.6/3.7/3.8 version')
+if sys.version_info.major != 3 or sys.version_info.minor not in [5, 6, 7, 8, 9, 10]:
+    print('wrong version, should be 3.5/3.6/3.7/3.8/3.9 version')
     sys.exit()
 
 with io.open('QUANTAXIS/__init__.py', 'rt', encoding='utf8') as f:
@@ -50,7 +50,7 @@ with io.open('QUANTAXIS/__init__.py', 'rt', encoding='utf8') as f:
 try:
     if sys.platform in ['win32', 'darwin']:
         print(webbrowser.open(
-            'https://github.com/QUANTAXIS/QUANTAXIS/blob/master/CHANGELOG.md'))
+            'https://github.com/QUANTAXIS/QUANTAXIS/releases'))
         print('finish install')
 except:
     pass
@@ -65,17 +65,24 @@ NAME = "quantaxis"
 """
 
 """
-PACKAGES = ["QUANTAXIS", "QUANTAXIS.QAFetch", "QUANTAXIS.QACmd", "QUANTAXIS.QAMarket", 'QUANTAXIS.QASetting', "QUANTAXIS.QACmd",
-            "QUANTAXIS.QAApplication", "QUANTAXIS.QAEngine", "QUANTAXIS.QAData", 'QUANTAXIS.QAData.proto', "QUANTAXIS.QAAnalysis", 'QUANTAXIS.QASelector',
-            "QUANTAXIS.QASU", "QUANTAXIS.QAUtil", "QUANTAXIS.QAARP", "QUANTAXIS.QAIndicator"]
+PACKAGES = ["QUANTAXIS", "QUANTAXIS.QAFetch", "QUANTAXIS.QACmd", 'QUANTAXIS.QASetting', "QUANTAXIS.QAFactor",
+            "QUANTAXIS.QAEngine", "QUANTAXIS.QAData", "QUANTAXIS.QAAnalysis", "QUANTAXIS.QAPubSub",
+            "QUANTAXIS.QASU", "QUANTAXIS.QAUtil",  "QUANTAXIS.QAIndicator", "QUANTAXIS.QAStrategy",
+            "QUANTAXIS.QAMarket", "QUANTAXIS.QIFI", "QUANTAXIS.QAWebServer"]
 """
 
 """
 
 DESCRIPTION = "QUANTAXIS:Quantitative Financial Strategy Framework"
 
-with open("README_ENG.md", "r") as fh:
-    LONG_DESCRIPTION = fh.read()
+
+# try:
+#     import pypandoc
+#     LONG_DESCRIPTION = pypandoc.convert_file('README.md', 'rst')
+# except Exception:
+# with open("README_ENG.md", "r", encoding='utf-8') as fh:
+#     LONG_DESCRIPTION = fh.read()
+LONG_DESCRIPTION = 'QUANTAXIS Financial Framework'
 
 """
 
@@ -93,8 +100,8 @@ URL = "https://github.com/quantaxis/quantaxis"
 
 LICENSE = "MIT"
 
-
-
+with open('requirements.txt') as reqs_file:
+    INSTALL_REQUIRES = reqs_file.readlines()
 
 setup(
     name=NAME,
@@ -107,18 +114,16 @@ setup(
         'Intended Audience :: Developers',
         'Operating System :: OS Independent',
     ],
-    install_requires=['pandas>=0.23.4', 'numpy>=1.12.0', 'tushare', 'flask_socketio>=2.9.0 ', 'motor>=1.1', 'seaborn>=0.8.1', 'pyconvert>=0.6.3',
-                      'lxml>=4.0', ' beautifulsoup4', 'matplotlib', 'requests', 'tornado', 'janus', 'pyecharts_snapshot', 'async_timeout',
-                      'demjson>=2.2.4', 'pymongo>=3.7', 'six>=1.10.0', 'tabulate>=0.7.7', 'pytdx>=1.67', 'retrying>=1.3.3',
-                      'zenlog>=1.1', 'delegator.py>=0.0.12', 'flask>=0.12.2', 'pyecharts==0.5.11', 'protobuf>=3.4.0'],
+    install_requires=INSTALL_REQUIRES,
     entry_points={
         'console_scripts': [
             'quantaxis=QUANTAXIS.QACmd:QA_cmd',
             'quantaxisq=QUANTAXIS.QAFetch.QATdx_adv:bat',
-            'qarun=QUANTAXIS.QACmd.runner:run'
+            'qarun=QUANTAXIS.QACmd.runner:run',
+            'qawebserver=QUANTAXIS.QAWebServer.server:main',
+
         ]
     },
-    # install_requires=requirements,
     keywords=KEYWORDS,
     author=AUTHOR,
     author_email=AUTHOR_EMAIL,
