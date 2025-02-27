@@ -8,7 +8,6 @@ import matplotlib.ticker as ticker
 import numpy as np
 import pandas as pd
 
-from QUANTAXIS.QAAnalysis.QAAnalysis_dataframe import QAAnalysis_stock
 from QUANTAXIS.QAData.data_marketvalue import QA_data_marketvalue
 from QUANTAXIS.QAFetch.Fetcher import QA_quotation
 from QUANTAXIS.QAFetch.QAQuery import QA_fetch_stock_info
@@ -48,7 +47,7 @@ class QAAnalysis_block():
     @property
     @lru_cache()
     def market_value(self):
-        return self.market_data.add_func(QA_data_marketvalue)
+        return QA_data_marketvalue(self.market_data.data)
 
     @property
     def week_data(self):
@@ -65,7 +64,7 @@ class QAAnalysis_block():
         return self.market_data.to_month()
 
     def block_index(self, methods='mv'):
-
+        
         if methods == 'mv':
             res = self.market_value.groupby(level=0).apply(
                 lambda x: np.average(x.close, weights=x.shares))
